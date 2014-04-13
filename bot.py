@@ -19,6 +19,7 @@ for scammer in range(len(scammers)):
 def comment(submission, commment_text):
 	global queue
 	global already_done
+	comment_text += "\n\n\n[Donate to the Creator of this Bot (Please)!](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=A3HSK4BPG56BU)"
 	try:
 		if vars(submission)["name"] not in already_done:
 			submission.add_comment(comment_text)
@@ -47,7 +48,7 @@ while True:
 			delta = now - author_created
 
 			# Check if they're a scammer. If they are one, skip everything else and cut straight to the point.
-			if author.name in scammers::
+			if author.name in scammers:
 				comment_text += "**WARNING: THIS PERSON IS ON THE [CONFIRMED SCAMMERS LIST!](http://www.reddit.com/r/giftcardexchange/wiki/scammers)**\n\n\n***DO NOT, I REPEAT, DO NOT TRADE WITH THEM!***"
 				comment(submission, comment_text)
 				continue
