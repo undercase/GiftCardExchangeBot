@@ -24,32 +24,32 @@ while True:
 
 			# Check account age
 			if delta.days < 7:
-				comment +=  "WARNING: THIS ACCOUNT IS LESS THAN A WEEK OLD! TRADE WITH CAUTION!\n\n\n"
+				comment +=  "WARNING: This poster's account is less than a week old! Trade with caution!\n\n\n"
 			elif delta.days < 31:
-				comment += "WARNING: THIS ACCOUNT IS LESS THAN A MONTH OLD! TRADE WITH CAUTION!\n\n\n"
+				comment += "WARNING: This poster's account is less than a month old! Trade with caution!\n\n\n"
 			elif delta.days < 93:
-				comment += "WARNING: THIS ACCOUNT IS LESS THAN THREE MONTHS OLD! TRADE WITH CAUTION!\n\n\n"
+				comment += "WARNING: This poster's account is less than three months old! Trade with caution!\n\n\n"
 			else:
-				comment += "THIS USER'S ACCOUNT IS OLDER THAN THREE MONTHS! SO FAR, IT LOOKS SAFE!\n\n\n"
+				comment += "This poster's account is older than three months! It fulfills the age requirement!!\n\n\n"
 
 			# Check comment karma
 			if author.comment_karma < 10:
-				comment += "WARNING: THIS USER HAS VERY, VERY LITTLE KARMA! TRADE WITH CAUTION!\n\n\n"
+				comment += "WARNING: This poster has very, very little (less than 10) karma! Trade with caution!\n\n\n"
 			elif author.comment_karma < 100:
-				comment += "WARNING: THIS USER HAS LITTLE KARMA! TRADE WITH CAUTION!\n\n\n"
+				comment += "WARNING: This poster has little (less than 100) karma! Trade with caution!\n\n\n"
 			elif author.comment_karma < 300:
-				comment += "WARNING: THIS USER HAS LESS-THAN-AVERAGE KARMA! TRADE WITH CAUTION!\n\n\n"
+				comment += "WARNING: This poster has less-than-average (less than 300) karma! Trade with caution!\n\n\n"
 			else:
-				comment += "THIS USER HAS MORE THAN 300 KARMA! IT LOOKS SAFE!\n\n\n"
+				comment += "This poster has more than 300 karma! (S)he fulfills the karma requirement!\n\n\n"
 
 			# Overall
-			count = sentence.count("WARNING")
+			count = comment.count("WARNING")
 			if count == 2:
-				comment += "OVERALL: DO NOT TRADE WITH THIS PERSON! THEY DO NOT HAVE AN OLD ENOUGH ACCOUNT OR ENOUGH KARMA!"
+				comment += "OVERALL: Do not trade with this poster! They do not fulfill any of this subreddit's requirements!!"
 			elif count == 1:
-				comment += "OVERALL: BE CAREFUL WITH THIS PERSON! THEY ONLY FULFILL ONE OF THE SUBREDDIT REQUIREMENTS!"
+				comment += "OVERALL: Be careful with this poster! They only fulfill one of this subreddit's requirements!"
 			elif count == 0:
-				comment += "OVERALL: THIS PERSON'S ACCOUNT LOOKS GREAT!"
+				comment += "OVERALL: This poster's account looks great! (Still be careful though)"
 
 			submission.add_comment(comment)
 
