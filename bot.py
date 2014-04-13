@@ -12,8 +12,10 @@ queue = Queue.Queue()
 
 def comment(submission, commment):
 	global queue
+	global already_done
 	try:
 		submission.add_comment(comment)
+		already_done.append(submission)
 	except RateLimitExceeded:
 		queue.put((submission, comment))
 
@@ -66,6 +68,4 @@ while True:
 				comment += "OVERALL: This poster's account looks great! (Still be careful though)"
 			
 			comment(submission, comment)
-
-			already_done.append(submission)
 	time.sleep(30)
