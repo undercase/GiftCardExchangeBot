@@ -10,15 +10,15 @@ reddit.login()
 already_done = []
 queue = Queue.Queue()
 
-def comment(submission, commment):
+def comment(submission, commment_text):
 	global queue
 	global already_done
 	try:
-		submission.add_comment(comment)
+		submission.add_comment(comment_text)
 		already_done.append(submission)
 		print "Commented on submission " + vars(submission)["name"]
-	except RateLimitExceeded:
-		queue.put((submission, comment))
+	except praw.errors.RateLimitExceeded:
+		queue.put((submission, comment_text))
 
 while True:
 
