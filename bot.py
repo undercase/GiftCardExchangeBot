@@ -14,9 +14,10 @@ def comment(submission, commment_text):
 	global queue
 	global already_done
 	try:
-		submission.add_comment(comment_text)
-		already_done.append(submission)
-		print "Commented on submission " + vars(submission)["name"]
+		if vars(submission)["name"] not in already_done:
+			submission.add_comment(comment_text)
+			already_done.append(vars(submission)["name"])
+			print "Commented on submission " + vars(submission)["name"]
 	except praw.errors.RateLimitExceeded:
 		queue.put((submission, comment_text))
 
@@ -30,7 +31,7 @@ while True:
 			item = queue.get()
 			comment(item[0], item[1])
 
-		if not (submission in already_done):
+		if vars(submission)["name"] not in already_done:
 			author = vars(submission)["author"]
 			comment_text = ""
 
