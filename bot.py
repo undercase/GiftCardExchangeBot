@@ -36,11 +36,12 @@ while True:
 
 	subreddit = reddit.get_subreddit("giftcardexchange")
 
-	for submission in subreddit.get_new(limit=10):
-
-		while not queue.empty():
+	# Check the queue before doing any new submissions
+	while not queue.empty():
 			item = queue.get()
 			comment(item[0], item[1])
+
+	for submission in subreddit.get_new(limit=10):
 
 		if vars(submission)["name"] not in already_done:
 			author = vars(submission)["author"]
