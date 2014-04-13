@@ -30,6 +30,7 @@ def comment(submission, comment_text):
 			already_done.append(vars(submission)["name"])
 			print "Commented on submission " + vars(submission)["name"]
 	except praw.errors.RateLimitExceeded:
+		print "Submission: " + vars(submission)["name"] + " commenting failed!"
 		queue.put((submission, comment_text))
 
 while True:
@@ -72,7 +73,7 @@ while True:
 			elif delta.days < 93:
 				comment_text += "WARNING: This poster's account is less than three months old! Trade with caution!\n\n\n"
 			else:
-				comment_text += "This poster's account is older than three months! It fulfills the age requirement!!\n\n\n"
+				comment_text += "This poster's account is older than three months! It is established on reddit!\n\n\n"
 
 			# Check comment karma
 			if author.comment_karma < 10:
@@ -82,14 +83,14 @@ while True:
 			elif author.comment_karma < 300:
 				comment_text += "WARNING: This poster has less-than-average (less than 300) karma! Trade with caution!\n\n\n"
 			else:
-				comment_text += "This poster has more than 300 karma! (S)he fulfills the karma requirement!\n\n\n"
+				comment_text += "This poster has more than 300 karma! (S)he has earned a fair amount of karma!\n\n\n"
 
 			# Overall
 			count = comment_text.count("WARNING")
 			if count == 2:
-				comment_text += "OVERALL: Do not trade with this poster! They do not fulfill any of this subreddit's requirements!!"
+				comment_text += "OVERALL: Do not trade with this poster! They have a young account, a small amount of karma, and are not a confirmed trader!"
 			elif count == 1:
-				comment_text += "OVERALL: Be careful with this poster! They only fulfill one of this subreddit's requirements!"
+				comment_text += "OVERALL: Be careful with this poster! They have an okay account and are not a confirmed trader!"
 			elif count == 0:
 				comment_text += "OVERALL: This poster's account looks great! (Still be careful though)"
 			
