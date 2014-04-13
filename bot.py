@@ -10,6 +10,12 @@ reddit.login()
 already_done = []
 queue = Queue.Queue()
 
+# Generate scammers list
+with open("scammers.txt", "r") as scammer:
+	scammers = scammer.readlines()
+for scammer in range(len(scammers)):
+	scammers[scammer] = scammers[scammer].strip()
+
 def comment(submission, commment_text):
 	global queue
 	global already_done
@@ -39,6 +45,12 @@ while True:
 			author_created = datetime.datetime.fromtimestamp(int(author.created_utc))
 			now = datetime.datetime.now()
 			delta = now - author_created
+
+			# Check if they're a scammer. If they are one, skip everything else and cut straight to the point.
+			if author.name in scammers::
+				comment_text += "**WARNING: THIS PERSON IS ON THE [CONFIRMED SCAMMERS LIST!](http://www.reddit.com/r/giftcardexchange/wiki/scammers)**\n\n\n***DO NOT, I REPEAT, DO NOT TRADE WITH THEM!***"
+				comment(submission, comment_text)
+				continue
 
 			# Check account age
 			if delta.days < 7:
