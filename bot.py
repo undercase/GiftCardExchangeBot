@@ -1,17 +1,31 @@
 import praw
 import datetime
 import time
+import Queue
 
 reddit = praw.Reddit("GiftCardExchange Warner v1.0 by /u/superman3275",)
+
 reddit.login()
 
 already_done = []
+queue = Queue.Queue()
+
+def comment(submission, commment):
+	global queue
+	try:
+		submission.add_comment(comment)
+	except RateLimitExceeded:
+		queue.put((submission, comment))
 
 while True:
 
 	subreddit = reddit.get_subreddit("giftcardexchange")
 
 	for submission in subreddit.get_new(limit=10):
+
+		while not queue.empty():
+			item = queue.get()
+			comment(item[0], item[1])
 
 		if not (submission in already_done):
 			author = vars(submission)["author"]
@@ -50,8 +64,8 @@ while True:
 				comment += "OVERALL: Be careful with this poster! They only fulfill one of this subreddit's requirements!"
 			elif count == 0:
 				comment += "OVERALL: This poster's account looks great! (Still be careful though)"
-
-			submission.add_comment(comment)
+			
+			comment(submission, comment)
 
 			already_done.append(submission)
 	time.sleep(30)
