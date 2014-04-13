@@ -38,8 +38,8 @@ while True:
 
 	# Check the queue before doing any new submissions
 	while not queue.empty():
-			item = queue.get()
-			comment(item[0], item[1])
+		item = queue.get()
+		comment(item[0], item[1])
 
 	for submission in subreddit.get_new(limit=10):
 
