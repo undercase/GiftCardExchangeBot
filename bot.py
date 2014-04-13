@@ -15,8 +15,12 @@ with open("scammers.txt", "r") as scammer:
 	scammers = scammer.readlines()
 for scammer in range(len(scammers)):
 	scammers[scammer] = scammers[scammer].strip()
+with open("confirmed.txt", "r") as confirm:
+	confirmed = confirm.readlines()
+for confirm in range(len(confirmed)):
+	confirmed[confirm] = confirmed[confirm].strip()
 
-def comment(submission, commment_text):
+def comment(submission, comment_text):
 	global queue
 	global already_done
 	comment_text += "\n\n\n[Donate to the Creator of this Bot (Please)!](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=A3HSK4BPG56BU)"
@@ -49,7 +53,13 @@ while True:
 
 			# Check if they're a scammer. If they are one, skip everything else and cut straight to the point.
 			if author.name in scammers:
-				comment_text += "**WARNING: THIS PERSON IS ON THE [CONFIRMED SCAMMERS LIST!](http://www.reddit.com/r/giftcardexchange/wiki/scammers)**\n\n\n***DO NOT, I REPEAT, DO NOT TRADE WITH THEM!***"
+				comment_text += "**WARNING: THIS POSTER IS ON THE [CONFIRMED SCAMMERS LIST!](http://www.reddit.com/r/giftcardexchange/wiki/scammers)**\n\n\n***DO NOT, I REPEAT, DO NOT TRADE WITH THEM!***"
+				comment(submission, comment_text)
+				continue
+
+			# Check if they're a good trader. If they are, skip everything else and cut straight to the point.
+			if author.name in confirmed:
+				comment_text += "**This poster is on the [Good Trader List!](http://www.reddit.com/r/giftcardexchange/comments/1wqwb9/trading_confirmation_thread_post_here_when_youve/)**\n\n\nThis means that they are safe to trade with!"
 				comment(submission, comment_text)
 				continue
 
