@@ -90,4 +90,4 @@ while True:
 				comment_text += "OVERALL: This poster's account looks great! (Still be careful though)"
 			
 			comment(submission, comment_text)
-	time.sleep(30)
+	time.sleep(1800)
