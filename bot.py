@@ -27,7 +27,7 @@ def comment(submission, comment_text):
 			submission.add_comment(comment_text)
 			already_done.append(vars(submission)["name"])
 			print "Commented on submission " + vars(submission)["name"]
-	except praw.errors.RateLimitExceededas error:
+	except praw.errors.RateLimitExceeded as error:
 		print "Submission: " + vars(submission)["name"] + " commenting failed! Sleeping for %d seconds!" % error.sleep_time
 		time.sleep(error.sleep_time)
 		comment(submission, comment_text)
