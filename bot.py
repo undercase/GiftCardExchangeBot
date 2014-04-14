@@ -19,9 +19,10 @@ with open("confirmed.txt", "r") as confirm:
 for confirm in range(len(confirmed)):
 	confirmed[confirm] = confirmed[confirm].strip()
 
-def comment(submission, comment_text):
+def comment(submission, comment_text, donate=True):
 	global already_done
-	comment_text += "\n\n\n[Donate to the Creator of this Bot (Please)!](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=A3HSK4BPG56BU)"
+	if donate:
+		comment_text += "\n\n\n[Donate to the Creator of this Bot (Please)!](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=A3HSK4BPG56BU)"
 	try:
 		if vars(submission)["name"] not in already_done:
 			submission.add_comment(comment_text)
@@ -30,7 +31,7 @@ def comment(submission, comment_text):
 	except praw.errors.RateLimitExceeded as error:
 		print "Submission: " + vars(submission)["name"] + " commenting failed! Sleeping for %d seconds!" % error.sleep_time
 		time.sleep(error.sleep_time)
-		comment(submission, comment_text)
+		comment(submission, comment_text, donate=False)
 
 while True:
 
