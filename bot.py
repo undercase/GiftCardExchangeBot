@@ -8,7 +8,6 @@ reddit = praw.Reddit("GiftCardExchange Warner v1.0 by /u/superman3275",)
 reddit.login()
 
 already_done = []
-queue = Queue.Queue()
 
 # Generate scammers list
 with open("scammers.txt", "r") as scammer:
@@ -21,7 +20,6 @@ for confirm in range(len(confirmed)):
 	confirmed[confirm] = confirmed[confirm].strip()
 
 def comment(submission, comment_text):
-	global queue
 	global already_done
 	comment_text += "\n\n\n[Donate to the Creator of this Bot (Please)!](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=A3HSK4BPG56BU)"
 	try:
@@ -29,18 +27,14 @@ def comment(submission, comment_text):
 			submission.add_comment(comment_text)
 			already_done.append(vars(submission)["name"])
 			print "Commented on submission " + vars(submission)["name"]
-	except praw.errors.RateLimitExceeded:
-		print "Submission: " + vars(submission)["name"] + " commenting failed!"
-		queue.put((submission, comment_text))
+	except praw.errors.RateLimitExceededas error:
+		print "Submission: " + vars(submission)["name"] + " commenting failed! Sleeping for %d seconds!" % error.sleep_time
+		time.sleep(error.sleep_time)
+		comment(submission, comment_text)
 
 while True:
 
 	subreddit = reddit.get_subreddit("giftcardexchange")
-
-	# Check the queue before doing any new submissions
-	while not queue.empty():
-		item = queue.get()
-		comment(item[0], item[1])
 
 	for submission in subreddit.get_new(limit=10):
 
