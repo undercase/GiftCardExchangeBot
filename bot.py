@@ -83,7 +83,7 @@ while True:
 			# Overall
 			count = comment_text.count("WARNING")
 			if count == 2:
-				comment_text += "OVERALL: Do not trade with this poster! They have a young account, a small amount of karma, and are not a confirmed trader!"
+				comment_text += "OVERALL: This is a **very, very high risk** poster! They have a young account, a small amount of karma, and are not a confirmed trader!"
 			elif count == 1:
 				comment_text += "OVERALL: Be careful with this poster! They have an okay account and are not a confirmed trader!"
 			elif count == 0:
