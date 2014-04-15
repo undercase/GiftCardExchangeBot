@@ -3,26 +3,10 @@ import datetime
 import time
 import Queue
 
-reddit = praw.Reddit("GiftCardExchange Warner v1.0 by /u/superman3275",)
-
-reddit.login()
-
-already_done = []
-
-# Generate scammers list
-with open("scammers.txt", "r") as scammer:
-	scammers = scammer.readlines()
-for scammer in range(len(scammers)):
-	scammers[scammer] = scammers[scammer].strip()
-with open("confirmed.txt", "r") as confirm:
-	confirmed = confirm.readlines()
-for confirm in range(len(confirmed)):
-	confirmed[confirm] = confirmed[confirm].strip()
-
 def comment(submission, comment_text, donate=True):
 	global already_done
 	if donate:
-		comment_text += "\n\n\n[Donate to the Creator of this Bot (Please)!](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=A3HSK4BPG56BU)"
+		comment_text += "\n\n\n^[Donate to the Creator of this Bot (Please)!](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=A3HSK4BPG56BU)"
 	try:
 		if vars(submission)["name"] not in already_done:
 			submission.add_comment(comment_text)
@@ -33,61 +17,83 @@ def comment(submission, comment_text, donate=True):
 		time.sleep(error.sleep_time)
 		comment(submission, comment_text, donate=False)
 
-while True:
+def main():
+	while True:
 
-	subreddit = reddit.get_subreddit("giftcardexchange")
+		subreddit = reddit.get_subreddit("giftcardexchange")
 
-	for submission in subreddit.get_new(limit=10):
+		for submission in subreddit.get_new(limit=10):
 
-		if vars(submission)["name"] not in already_done:
-			author = vars(submission)["author"]
-			comment_text = ""
+			if vars(submission)["name"] not in already_done:
+				author = vars(submission)["author"]
+				comment_text = ""
 
-			# Get account age
-			author_created = datetime.datetime.fromtimestamp(int(author.created_utc))
-			now = datetime.datetime.now()
-			delta = now - author_created
+				# Get account age
+				author_created = datetime.datetime.fromtimestamp(int(author.created_utc))
+				now = datetime.datetime.now()
+				delta = now - author_created
 
-			# Check if they're a scammer. If they are one, skip everything else and cut straight to the point.
-			if author.name in scammers:
-				comment_text += "**WARNING: THIS POSTER IS ON THE [CONFIRMED SCAMMERS LIST!](http://www.reddit.com/r/giftcardexchange/wiki/scammers)**\n\n\n***DO NOT, I REPEAT, DO NOT TRADE WITH THEM!***"
+				# Check if they're a scammer. If they are one, skip everything else and cut straight to the point.
+				if author.name in scammers:
+					comment_text += "**WARNING: THIS POSTER IS ON THE [CONFIRMED SCAMMERS LIST!](http://www.reddit.com/r/giftcardexchange/wiki/scammers)**\n\n\n***DO NOT, I REPEAT, DO NOT TRADE WITH THEM!***"
+					comment(submission, comment_text)
+					continue
+
+				# Check if they're a good trader. If they are, skip everything else and cut straight to the point.
+				if author.name in confirmed:
+					comment_text += "**This poster is on the [Good Trader List!](http://www.reddit.com/r/giftcardexchange/comments/1wqwb9/trading_confirmation_thread_post_here_when_youve/)**\n\n\nThis means that they are safe to trade with!"
+					comment(submission, comment_text)
+					continue
+
+				# Check account age
+				if delta.days < 7:
+					comment_text +=  "WARNING: This poster's account is less than a week old! Trade with caution!\n\n\n"
+				elif delta.days < 31:
+					comment_text += "WARNING: This poster's account is less than a month old! Trade with caution!\n\n\n"
+				elif delta.days < 93:
+					comment_text += "WARNING: This poster's account is less than three months old! Trade with caution!\n\n\n"
+				else:
+					comment_text += "This poster's account is older than three months! It is established on reddit!\n\n\n"
+
+				# Check comment karma
+				if author.comment_karma < 10:
+					comment_text += "WARNING: This poster has very, very little (less than 10) karma! Trade with caution!\n\n\n"
+				elif author.comment_karma < 100:
+					comment_text += "WARNING: This poster has little (less than 100) karma! Trade with caution!\n\n\n"
+				elif author.comment_karma < 300:
+					comment_text += "WARNING: This poster has less-than-average (less than 300) karma! Trade with caution!\n\n\n"
+				else:
+					comment_text += "This poster has more than 300 karma! (S)he has earned a fair amount of karma!\n\n\n"
+
+				# Overall
+				count = comment_text.count("WARNING")
+				if count == 2:
+					comment_text += "OVERALL: This is a **very, very high risk** poster! They have a young account, a small amount of karma, and are not a confirmed trader!"
+				elif count == 1:
+					comment_text += "OVERALL: Be careful with this poster! They have an okay account and are not a confirmed trader!"
+				elif count == 0:
+					comment_text += "OVERALL: This poster's account looks great! (Still be careful though)"
+				
 				comment(submission, comment_text)
-				continue
+		time.sleep(1800)
 
-			# Check if they're a good trader. If they are, skip everything else and cut straight to the point.
-			if author.name in confirmed:
-				comment_text += "**This poster is on the [Good Trader List!](http://www.reddit.com/r/giftcardexchange/comments/1wqwb9/trading_confirmation_thread_post_here_when_youve/)**\n\n\nThis means that they are safe to trade with!"
-				comment(submission, comment_text)
-				continue
+# Ensure that the bot won't be automatically executed when being imported
+if __name__ == "__main__":
 
-			# Check account age
-			if delta.days < 7:
-				comment_text +=  "WARNING: This poster's account is less than a week old! Trade with caution!\n\n\n"
-			elif delta.days < 31:
-				comment_text += "WARNING: This poster's account is less than a month old! Trade with caution!\n\n\n"
-			elif delta.days < 93:
-				comment_text += "WARNING: This poster's account is less than three months old! Trade with caution!\n\n\n"
-			else:
-				comment_text += "This poster's account is older than three months! It is established on reddit!\n\n\n"
+	reddit = praw.Reddit("GiftCardExchange Warner v1.0 by /u/superman3275",)
+	reddit.login()
 
-			# Check comment karma
-			if author.comment_karma < 10:
-				comment_text += "WARNING: This poster has very, very little (less than 10) karma! Trade with caution!\n\n\n"
-			elif author.comment_karma < 100:
-				comment_text += "WARNING: This poster has little (less than 100) karma! Trade with caution!\n\n\n"
-			elif author.comment_karma < 300:
-				comment_text += "WARNING: This poster has less-than-average (less than 300) karma! Trade with caution!\n\n\n"
-			else:
-				comment_text += "This poster has more than 300 karma! (S)he has earned a fair amount of karma!\n\n\n"
+	already_done = []
 
-			# Overall
-			count = comment_text.count("WARNING")
-			if count == 2:
-				comment_text += "OVERALL: This is a **very, very high risk** poster! They have a young account, a small amount of karma, and are not a confirmed trader!"
-			elif count == 1:
-				comment_text += "OVERALL: Be careful with this poster! They have an okay account and are not a confirmed trader!"
-			elif count == 0:
-				comment_text += "OVERALL: This poster's account looks great! (Still be careful though)"
-			
-			comment(submission, comment_text)
-	time.sleep(1800)
+	# Generate scammers list
+	with open("scammers.txt", "r") as scammer:
+		scammers = scammer.readlines()
+	for scammer in range(len(scammers)):
+		scammers[scammer] = scammers[scammer].strip()
+	# Generate 
+	with open("confirmed.txt", "r") as confirm:
+		confirmed = confirm.readlines()
+	for confirm in range(len(confirmed)):
+		confirmed[confirm] = confirmed[confirm].strip()
+
+	main()
