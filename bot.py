@@ -23,7 +23,7 @@ def save_already_done():
 def comment(submission, comment_text, donate=True):
 	global already_done
 	if donate:
-		comment_text += "\n\n\n[^Donate ^to ^the ^Creator ^of ^this ^Bot ^(Please)!](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=A3HSK4BPG56BU)"
+		comment_text += "\n\n\n[^Donate ^to ^the ^Creator ^of ^this ^Bot ^(Please)^!](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=A3HSK4BPG56BU)"
 	try:
 		if vars(submission)["name"] not in already_done:
 			submission.add_comment(comment_text)
