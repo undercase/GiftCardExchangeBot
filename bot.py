@@ -98,7 +98,7 @@ def main():
 # Ensure that the bot won't be automatically executed when being imported
 if __name__ == "__main__":
 
-	reddit = praw.Reddit("GiftCardExchange Warner v1.0 by /u/superman3275",)
+	reddit = praw.Reddit("GiftCardExchange Warner v2.0 by /u/superman3275",)
 	reddit.login()
 
 	# Generate already_done list
