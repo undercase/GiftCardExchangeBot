@@ -6,7 +6,7 @@ import Queue
 # Exit function to save already_done
 def save_already_done():
 	with open("already_done.txt", "w") as done:
-		for line in range(len(already_done)):
+		for line in range(len(already_done) - 10, len(already_done)):
 			# This ternary operator makes sure a newline isn't added on the last line.
 			done.write(already_done[line] + ("\n" if line == len(already_done) else ""))
 
