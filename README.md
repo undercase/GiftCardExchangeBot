@@ -9,6 +9,8 @@ Features:
 * Checks Account Karma!
 * Checks if Account is on the Confirmed Scammers List!
 * Checks if Account is on the Confirmed Good Traders List!
+* Shows Specialized Ratings Depending on what Red Flags an Account Has!
+* Serializes Already Posted on Submissions!
 
 Coming Soon:
 
