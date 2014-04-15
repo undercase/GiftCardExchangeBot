@@ -3,6 +3,16 @@ import datetime
 import time
 import Queue
 
+overall = {
+	0: "This is a great poster! They have an established account and lots of karma! (Still be careful though)",
+	1: "This is a good poster! They have a relatively established account.",
+	2: "This is a okay poster! They have a somewhat established account.",
+	3: "This is a slightly risky poster! Be careful when trading.",
+	4: "This is a risky poster! Be very careful when trading.",
+	5: "This is a very risky poster! Be extremely careful when trading.",
+	6: "This is a **very, very high risk** poster! Be careful when trading."
+}
+
 # Exit function to save already_done
 def save_already_done():
 	with open("already_done.txt", "w") as done:
@@ -34,6 +44,7 @@ def main():
 			if vars(submission)["name"] not in already_done:
 				author = vars(submission)["author"]
 				comment_text = ""
+				rating = 0
 
 				# Get account age
 				author_created = datetime.datetime.fromtimestamp(int(author.created_utc))
@@ -54,32 +65,32 @@ def main():
 
 				# Check account age
 				if delta.days <= 1:
+					rating += 3
 					comment_text +=  "WARNING: This poster's account is less than a day old (EXTREMELY RISKY)! Trade with caution!\n\n\n"
 				elif delta.days <= 7:
+					rating += 2
 					comment_text += "WARNING: This poster's account is less than a seven days old (VERY RISKY)! Trade with caution!\n\n\n"
 				elif delta.days <= 31:
+					rating += 1
 					comment_text += "WARNING: This poster's account is less than a month old (RISKY)! Trade with caution!\n\n\n"
 				else:
 					comment_text += "This poster's account is older than a month! It is established on reddit!\n\n\n"
 
 				# Check comment karma
 				if author.comment_karma < 10:
+					rating += 3
 					comment_text += "WARNING: This poster has very, very little (less than ten) karma! Trade with caution!\n\n\n"
 				elif author.comment_karma < 50:
+					rating += 2
 					comment_text += "WARNING: This poster has little (less than fifty) karma! Trade with caution!\n\n\n"
 				elif author.comment_karma < 100:
+					rating += 1
 					comment_text += "WARNING: This poster has less-than-average (less than one-hundred) karma! Trade with caution!\n\n\n"
 				else:
 					comment_text += "This poster has more than one-hundred karma! (S)he has earned a fair amount of karma!\n\n\n"
 
 				# Overall
-				count = comment_text.count("WARNING")
-				if count == 2:
-					comment_text += "OVERALL: This is a **VERY, VERY HIGH RISK** poster! They have a young account (less than a month), a small amount of karma (less than one-hundred), and are not a confirmed trader!"
-				elif count == 1:
-					comment_text += "OVERALL: Be careful with this poster! They have an okay account and are not a confirmed trader!"
-				elif count == 0:
-					comment_text += "OVERALL: This poster's account looks great! (Still be careful though)"
+				comment_text += overall[rating]
 				
 				comment(submission, comment_text)
 		time.sleep(1800)
