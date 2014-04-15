@@ -25,12 +25,12 @@ def comment(submission, comment_text, donate=True):
 	if donate:
 		comment_text += "\n\n\n[^Donate ^to ^the ^Creator ^of ^this ^Bot ^(Please)^!](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=A3HSK4BPG56BU)"
 	try:
-		if vars(submission)["name"] not in already_done:
+		if submission.name not in already_done:
 			submission.add_comment(comment_text)
-			already_done.append(vars(submission)["name"])
-			print "Commented on submission " + vars(submission)["name"]
+			already_done.append(submission.name)
+			print "Commented on submission " + submission.name
 	except praw.errors.RateLimitExceeded as error:
-		print "Submission: " + vars(submission)["name"] + " commenting failed! Sleeping for %d seconds!" % error.sleep_time
+		print "Submission: " + submission.name + " commenting failed! Sleeping for %d seconds!" % error.sleep_time
 		time.sleep(error.sleep_time)
 		comment(submission, comment_text, donate=False)
 
@@ -41,8 +41,8 @@ def main():
 
 		for submission in subreddit.get_new(limit=10):
 
-			if vars(submission)["name"] not in already_done:
-				author = vars(submission)["author"]
+			if submission.name not in already_done:
+				author = submission.author
 				comment_text = ""
 				rating = 0
 
