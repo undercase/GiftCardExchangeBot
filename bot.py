@@ -19,7 +19,7 @@ spreadsheet_url = "https://docs.google.com/spreadsheet/ccc?key=0AiFZyanaAvZDdHdy
 def gspread_input_login():
 	username = raw_input("Username: ")
 	password = getpass.getpass()
-	gspread.login(username, password)
+	return gspread.login(username, password)
 
 # Exit function to save already_done
 def save_already_done():
