@@ -4,6 +4,7 @@ import time
 import atexit
 import getpass
 import gspread
+import threading
 
 overall = {
 	0: "This is a great poster! They have an established account and lots of karma! (Still be careful though)",
@@ -25,9 +26,9 @@ def gspread_input_login():
 # Exit function to save already_done
 def save_already_done():
 	with open("already_done.txt", "w") as done:
-		for line in range(len(already_done) - 10, len(already_done)):
+		for line in already_done[len(already_done)-10:]:
 			# This ternary operator makes sure a newline isn't added on the last line.
-			done.write(already_done[line] + ("\n" if line == len(already_done) else ""))
+			done.write(line + ("\n" if not line == already_done[-1] else ""))
 
 def comment(submission, comment_text, donate=True):
 	global already_done
@@ -137,4 +138,7 @@ if __name__ == "__main__":
 	# Register saving function to run on exit
 	atexit.register(save_already_done)
 
-	main()
+	# Run in a separate thread so that sleep() doesn't block atexit
+	thread = threading.Thread(target=main)
+
+	thread.start()
