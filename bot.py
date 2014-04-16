@@ -1,6 +1,7 @@
 import praw
 import datetime
 import time
+import atexit
 import getpass
 import gspread
 
@@ -132,5 +133,8 @@ if __name__ == "__main__":
 		confirmed = confirm.readlines()
 	for confirm in range(len(confirmed)):
 		confirmed[confirm] = confirmed[confirm].strip()
+
+	# Register saving function to run on exit
+	atexit.register(save_already_done)
 
 	main()
