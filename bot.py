@@ -1,7 +1,8 @@
 import praw
 import datetime
 import time
-import Queue
+import getpass
+import gspread
 
 overall = {
 	0: "This is a great poster! They have an established account and lots of karma! (Still be careful though)",
@@ -12,6 +13,13 @@ overall = {
 	5: "This is a very risky poster! Be extremely careful when trading.",
 	6: "This is a **very, very high risk** poster! Be careful when trading."
 }
+
+spreadsheet_url = "https://docs.google.com/spreadsheet/ccc?key=0AiFZyanaAvZDdHdyS0dQMnRSY01HVWYzSldTaGowbXc#gid=0"
+
+def gspread_input_login():
+	username = raw_input("Username: ")
+	password = getpass.getpass()
+	gspread.login(username, password)
 
 # Exit function to save already_done
 def save_already_done():
@@ -35,6 +43,14 @@ def comment(submission, comment_text, donate=True):
 		comment(submission, comment_text, donate=False)
 
 def main():
+
+	gc = gspread_input_login()
+
+	spreadsheet = gc.open_by_url(spreadsheet_url)
+	worksheet = spreadsheet.worksheet("Ban List")
+
+	banned = worksheet.col_values(1)
+
 	while True:
 
 		subreddit = reddit.get_subreddit("giftcardexchange")
@@ -52,7 +68,7 @@ def main():
 				delta = now - author_created
 
 				# Check if they're a scammer. If they are one, skip everything else and cut straight to the point.
-				if author.name in scammers:
+				if author.name in scammers or author.name in banned:
 					comment_text += "**WARNING: THIS POSTER IS ON THE [CONFIRMED SCAMMERS LIST!](http://www.reddit.com/r/giftcardexchange/wiki/scammers)**\n\n\n***DO NOT, I REPEAT, DO NOT TRADE WITH THEM!***"
 					comment(submission, comment_text)
 					continue
