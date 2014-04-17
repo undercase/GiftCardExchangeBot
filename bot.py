@@ -24,7 +24,8 @@ def gspread_input_login():
 # Exit function to save already_done
 def save_already_done():
 	with open("already_done.txt", "w") as done:
-		for line in already_done[len(already_done)-10:]:
+		# This ternary operator makes sure that if the bot has commented on less than ten posts it doesn't fail when saving.
+		for line in already_done[(len(already_done)-10) if len(already_done) >= 10 else 0:]:
 			# This ternary operator makes sure a newline isn't added on the last line.
 			done.write(line + ("\n" if not line == already_done[-1] else ""))
 
