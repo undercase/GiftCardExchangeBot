@@ -1,10 +1,8 @@
 import praw
 import datetime
 import time
-import atexit
 import getpass
 import gspread
-import threading
 
 overall = {
 	0: "This is a great poster! They have an established account and lots of karma! (Still be careful though)",
@@ -111,6 +109,9 @@ def main():
 				comment_text += overall[rating]
 				
 				comment(submission, comment_text)
+
+		save_already_done()
+
 		time.sleep(1800)
 
 # Ensure that the bot won't be automatically executed when being imported
@@ -135,10 +136,4 @@ if __name__ == "__main__":
 	for confirm in range(len(confirmed)):
 		confirmed[confirm] = confirmed[confirm].strip()
 
-	# Register saving function to run on exit
-	atexit.register(save_already_done)
-
-	# Run in a separate thread so that sleep() doesn't block atexit
-	thread = threading.Thread(target=main)
-
-	thread.start()
+	main()
