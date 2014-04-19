@@ -76,7 +76,7 @@ def main():
 
 				# Check if they're a good trader. If they are, skip everything else and cut straight to the point.
 				if author.name in confirmed:
-					comment_text += "**This poster is on the [Good Trader List!](http://www.reddit.com/r/giftcardexchange/comments/1wqwb9/trading_confirmation_thread_post_here_when_youve/)**\n\n\nThis means that they are much safe to trade with!"
+					comment_text += "**This poster is on the [Good Trader List!](http://www.reddit.com/r/giftcardexchange/comments/1wqwb9/trading_confirmation_thread_post_here_when_youve/)**\n\n\nThis means that they are much safer to trade with!"
 					comment(submission, comment_text)
 					continue
 
