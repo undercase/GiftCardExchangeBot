@@ -5,13 +5,13 @@ import getpass
 import gspread
 
 overall = {
-	0: "This is a great poster! They have an established account and lots of karma! (Still be careful though)",
-	1: "This is a good poster! They have a relatively established account.",
-	2: "This is a okay poster! They have a somewhat established account.",
-	3: "This is a slightly risky poster! Be careful when trading.",
-	4: "This is a risky poster! Be very careful when trading.",
-	5: "This is a very risky poster! Be extremely careful when trading.",
-	6: "This is a **very, very high risk** poster! Be careful when trading."
+	0: "This is a good poster! They have a relatively established account and lots of karma! (Still be careful though)",
+	1: "This is a okay poster! They have a somewhat established account. (Still be careful though)",
+	2: "This is a risky poster poster! They have a relatively new account.",
+	3: "This is a very risky poster! Be careful when trading.",
+	4: "This is an extremely risky poster! Be very careful when trading.",
+	5: "This is a **very, very high risk** poster! Be **extremely** careful when trading.",
+	6: "This is a **very, very high risk** poster! Be **extremely** careful when trading."
 }
 
 spreadsheet_url = "https://docs.google.com/spreadsheet/ccc?key=0AiFZyanaAvZDdHdyS0dQMnRSY01HVWYzSldTaGowbXc#gid=0"
@@ -76,7 +76,7 @@ def main():
 
 				# Check if they're a good trader. If they are, skip everything else and cut straight to the point.
 				if author.name in confirmed:
-					comment_text += "**This poster is on the [Good Trader List!](http://www.reddit.com/r/giftcardexchange/comments/1wqwb9/trading_confirmation_thread_post_here_when_youve/)**\n\n\nThis means that they are safe to trade with!"
+					comment_text += "**This poster is on the [Good Trader List!](http://www.reddit.com/r/giftcardexchange/comments/1wqwb9/trading_confirmation_thread_post_here_when_youve/)**\n\n\nThis means that they are much safe to trade with!"
 					comment(submission, comment_text)
 					continue
 
