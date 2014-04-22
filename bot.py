@@ -7,7 +7,7 @@ import gspread
 overall = {
 	0: "This is a good poster! They have a relatively established account and lots of karma! (Still be careful though)",
 	1: "This is a okay poster! They have a somewhat established account. (Still be careful though)",
-	2: "This is a risky poster poster! They have a relatively new account.",
+	2: "This is a risky poster! They have a relatively new account.",
 	3: "This is a very risky poster! Be careful when trading.",
 	4: "This is an extremely risky poster! Be very careful when trading.",
 	5: "This is a **very, very high risk** poster! Be **extremely** careful when trading.",
